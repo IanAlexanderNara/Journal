@@ -63,13 +63,15 @@ ReadingList::~ReadingList()
 
 void ReadingList::buttonAddClicked()
 {
-    model->insertRow(model->rowCount());
+    while(model->canFetchMore()) model->fetchMore();
+    int numRecords = model->rowCount();
+    model->insertRow(numRecords);
     for(int i = 0; i < model->columnCount(); i++){
         if(i != ReadingListDelegate::statusColumn && i != ReadingListDelegate::rowidColumn){
-            model->setData(model->index(model->rowCount()-1, i), "", Qt::EditRole);
+            model->setData(model->index(numRecords, i), "", Qt::EditRole);
         }
     }
-    model->setData(model->index(model->rowCount()-1, ReadingListDelegate::statusColumn), "Ready to Start", Qt::EditRole);
+    model->setData(model->index(numRecords, ReadingListDelegate::statusColumn), "Ready to Start", Qt::EditRole);
 }
 
 void ReadingList::buttonSaveClicked()

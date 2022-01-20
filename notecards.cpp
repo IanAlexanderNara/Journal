@@ -74,11 +74,16 @@ Notecards::~Notecards()
 void Notecards::buttonAddClicked()
 {
     // insert a new row at the bottom of the table and auto populate number and empty strings
-    model->insertRow(model->rowCount(QModelIndex()), QModelIndex());
-    model->setData(model->index(model->rowCount()-1, 0), model->rowCount(), Qt::EditRole);
-    model->setData(model->index(model->rowCount()-1, 1), "", Qt::EditRole);
-    model->setData(model->index(model->rowCount()-1, 2), "", Qt::EditRole);
-    model->setData(model->index(model->rowCount()-1, 3), "", Qt::EditRole);
+
+    // determine number of records
+    while(model->canFetchMore()) model->fetchMore();
+    int numRecords = model->rowCount();
+
+    model->insertRow(numRecords, QModelIndex());
+    model->setData(model->index(numRecords, 0), numRecords + 1, Qt::EditRole);
+    model->setData(model->index(numRecords, 1), "", Qt::EditRole);
+    model->setData(model->index(numRecords, 2), "", Qt::EditRole);
+    model->setData(model->index(numRecords, 3), "", Qt::EditRole);
 }
 
 void Notecards::buttonSaveClicked()
