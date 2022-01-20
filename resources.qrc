@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>life_table/life_table.csv</file>
+    </qresource>
+</RCC>
