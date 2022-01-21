@@ -77,6 +77,7 @@ void ReadingList::buttonAddClicked()
 void ReadingList::buttonSaveClicked()
 {
     if(model->submitAll()){
+        while(model->canFetchMore()) model->fetchMore();
         emit sendStatusbarMessage(QString("Table save successful."));
     } else {
         emit sendStatusbarMessage(QString("Table save failed."));
@@ -119,6 +120,7 @@ void ReadingList::showContextMenuNotecards(const QPoint &pos)
         if(QMessageBox::Yes == QMessageBox(QMessageBox::Question, "Delete Row", message, QMessageBox::Yes|QMessageBox::No, this).exec()){
             model->removeRow(index.row());
             model->submitAll();
+            while(model->canFetchMore()) model->fetchMore();
         }
     }
 }

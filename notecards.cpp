@@ -11,6 +11,7 @@
 #include <QAction>
 #include <QMenu>
 #include "mouseclickfilter.h"
+#include <QScrollBar>
 Notecards::Notecards(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::Notecards)
@@ -89,6 +90,7 @@ void Notecards::buttonAddClicked()
 void Notecards::buttonSaveClicked()
 {
     if(model->submitAll()){
+        while(model->canFetchMore()) model->fetchMore();
         emit sendStatusbarMessage(QString("Table save successful."));
     } else {
         emit sendStatusbarMessage(QString("Table save failed."));
@@ -136,6 +138,7 @@ void Notecards::showContextMenuNotecards(const QPoint &pos)
         if(QMessageBox::Yes == QMessageBox(QMessageBox::Question, "Delete Row", message, QMessageBox::Yes|QMessageBox::No, this).exec()){
             model->removeRow(number-1);
             model->submitAll();
+            while(model->canFetchMore()) model->fetchMore();
         }
     }
 }
