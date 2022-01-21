@@ -78,7 +78,14 @@ void ReadingList::buttonSaveClicked()
 {
     if(model->submitAll()){
         while(model->canFetchMore()) model->fetchMore();
-        emit sendStatusbarMessage(QString("Table save successful."));
+        int numBooks = model->rowCount();
+        int numFinished = 0;
+        for(int i = 0; i < model->rowCount(); i++){
+            QModelIndex index = model->index(i, ReadingListDelegate::statusColumn);
+            if(model->data(index, Qt::DisplayRole) == ReadingListDelegate::FINISHED) numFinished++;
+        }
+        QString message = QString("Table save successful. %1 entries. %2 finished").arg(numBooks).arg(numFinished);
+        emit sendStatusbarMessage(message);
     } else {
         emit sendStatusbarMessage(QString("Table save failed."));
     }
