@@ -29,6 +29,7 @@
 #include "datepicker.h"
 #include <QFile>
 #include <QTimer>
+#include <QTime>
 namespace Ui {
 class Journal;
 }

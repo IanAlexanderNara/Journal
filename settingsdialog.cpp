@@ -46,8 +46,8 @@ void SettingsDialog::keyPressEvent(QKeyEvent *event)
 
 void SettingsDialog::saveClicked()
 {
-    QDateTime birthDate = ui->dateEditBirth->date().startOfDay();
-    QDateTime deathDate = ui->dateEditDeath->date().startOfDay();
+    QDateTime birthDate = QDateTime(ui->dateEditBirth->date());
+    QDateTime deathDate = QDateTime(ui->dateEditDeath->date());
     QSettings settings(SETTINGS_PATH, QSettings::IniFormat, this);
     settings.beginGroup(Journal::BIRTH_DEATH_GROUP);
     settings.setValue(Journal::BIRTH_KEY, birthDate);
@@ -57,7 +57,7 @@ void SettingsDialog::saveClicked()
 
 void SettingsDialog::calculateClicked()
 {
-    QDateTime birthDate = ui->dateEditBirth->date().startOfDay();
+    QDateTime birthDate = QDateTime(ui->dateEditBirth->date());
     QDateTime deathDate = Journal::calcDeathDate(birthDate, this);
     ui->dateEditDeath->setDate(deathDate.date());
 }

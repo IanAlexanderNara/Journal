@@ -118,7 +118,7 @@ void ReadingList::showContextMenuNotecards(const QPoint &pos)
     if(action && action->text() == CONTEXT_MENU_CLEAR){
         for(int i = 0; i < model->columnCount(); i++){
             if(i != ReadingListDelegate::statusColumn && i != ReadingListDelegate::rowidColumn){
-                QModelIndex delIndex = index.siblingAtColumn(i);
+                QModelIndex delIndex = index.sibling(index.row(), i);
                 model->setData(delIndex, "");
             }
         }

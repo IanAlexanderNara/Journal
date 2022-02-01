@@ -230,7 +230,7 @@ void Journal::initBirthDeath()
         DatePicker *datePicker = new DatePicker(this);
         datePicker->setWindowTitle("Enter Your Birthday");
         datePicker->exec();
-        birthDate = datePicker->getDate().startOfDay();
+        birthDate = QDateTime(datePicker->getDate());
         settings.setValue(BIRTH_KEY, birthDate);
     } else {
         birthDate = b.toDateTime();
@@ -255,7 +255,7 @@ QDateTime Journal::calcDeathDate(QDateTime birth, QWidget *parent)
     if(!file.open(QIODevice::ReadOnly)){
         QString message = "Failed to load actuarial table, defaulting to death day of 2060. You may modify manually in settings.";
         QMessageBox::warning(parent, "Couldn't Open File", message);
-        return QDate::fromString("01/01/2060", Journal::DATE_FORMAT).startOfDay();
+        return QDateTime(QDate::fromString("01/01/2060", Journal::DATE_FORMAT));
     }
 
     QTextStream stream(&file);
@@ -266,20 +266,20 @@ QDateTime Journal::calcDeathDate(QDateTime birth, QWidget *parent)
         if(a == QString()){
             QString message = "Failed to load actuarial table, defaulting to death day of 2060. You may modify manually in settings.";
             QMessageBox::warning(parent, "Couldn't Open File", message);
-            return QDate::fromString("01/01/2060", Journal::DATE_FORMAT).startOfDay();
+            return QDateTime(QDate::fromString("01/01/2060", Journal::DATE_FORMAT));
         }
         bool ok;
         int age =  a.toInt(&ok);
         if(!ok){
             QString message = "Failed to load actuarial table, defaulting to death day of 2060. You may modify manually in settings.";
             QMessageBox::warning(parent, "Couldn't Open File", message);
-            return QDate::fromString("01/01/2060", Journal::DATE_FORMAT).startOfDay();
+            return QDateTime(QDate::fromString("01/01/2060", Journal::DATE_FORMAT));
         }
         QString e = pair.value(1);
         if(e == QString()){
             QString message = "Failed to load actuarial table, defaulting to death day of 2060. You may modify manually in settings.";
             QMessageBox::warning(parent, "Couldn't Open File", message);
-            return QDate::fromString("01/01/2060", Journal::DATE_FORMAT).startOfDay();
+            return QDateTime(QDate::fromString("01/01/2060", Journal::DATE_FORMAT));
         }
         int expectancy = e.toInt();
         map.insert(age, expectancy);
@@ -299,7 +299,7 @@ QDateTime Journal::calcDeathDate(QDateTime birth, QWidget *parent)
     else if(age > 119)
         age = 119;
     int remainingYears = map[age];
-    QDateTime death = (QDate::currentDate().addYears(remainingYears)).startOfDay();
+    QDateTime death = QDateTime(QDate::currentDate().addYears(remainingYears));
     return death;
 }
 

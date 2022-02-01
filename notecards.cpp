@@ -114,7 +114,7 @@ void Notecards::showContextMenuNotecards(const QPoint &pos)
     QPoint globalPos = ui->tableView->mapToGlobal(pos);
 
     // Determine if last row or another row
-    int number = index.siblingAtColumn(0).data().toInt();
+    int number = index.sibling(index.row(), 0).data().toInt();
     int numRows = model->rowCount();
 
     //Construct menu and actions
