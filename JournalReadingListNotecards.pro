@@ -17,6 +17,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mouseclickfilter.cpp \
+    notecardinputdialog.cpp \
     notecards.cpp \
     notecardsdelegate.cpp \
     notecardssqlmodel.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     journalsqlmodel.h \
     mainwindow.h \
     mouseclickfilter.h \
+    notecardinputdialog.h \
     notecards.h \
     notecardsdelegate.h \
     notecardssqlmodel.h \
@@ -45,6 +47,7 @@ FORMS += \
     datepicker.ui \
     journal.ui \
     mainwindow.ui \
+    notecardinputdialog.ui \
     notecards.ui \
     readinglist.ui \
     settingsdialog.ui

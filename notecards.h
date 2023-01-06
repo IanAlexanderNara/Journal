@@ -38,6 +38,8 @@ private:
     const QString CONTEXT_MENU_DELETE = "Delete Row";
 
     QShortcut *saveShortcut;
+    QShortcut *searchShortcut;
+    QShortcut *tableShortcut;
 
     Ui::Notecards *ui;
     QSqlDatabase db ;

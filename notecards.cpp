@@ -33,7 +33,7 @@ Notecards::Notecards(QWidget *parent) :
     }
     QSqlQuery query(db);
     QString sqlString(QString("CREATE TABLE IF NOT EXISTS notecards ") +
-                      QString("(number INTERGER PRIMARY KEY, author TEXT NOT NULL, title TEXT NOT NULL, themes TEXT NOT NULL);"));
+                      QString("(number INTERGER PRIMARY KEY, author TEXT NOT NULL, title TEXT NOT NULL, themes TEXT NOT NULL, text TEXT);"));
     query.exec(sqlString);
 
     // Set up our table view model
@@ -47,6 +47,7 @@ Notecards::Notecards(QWidget *parent) :
     model->setHeaderData(1, Qt::Horizontal, tr("Author"));
     model->setHeaderData(2, Qt::Horizontal, tr("Title"));
     model->setHeaderData(3, Qt::Horizontal, tr("Themes"));
+    model->setHeaderData(4, Qt::Horizontal, tr("Text"));
     filterModel->setSourceModel(model);
     filterModel->setFilterCaseSensitivity(Qt::CaseInsensitive);
     ui->tableView->setModel(filterModel);
@@ -64,6 +65,15 @@ Notecards::Notecards(QWidget *parent) :
     // Setup keyboard shortcut
     saveShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_S), this);
     connect(saveShortcut, &QShortcut::activated, this, &Notecards::buttonSaveClicked);
+    searchShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_W), this);
+    connect(searchShortcut, &QShortcut::activated, this, [=] () {
+        ui->lineEdit->setFocus();
+    });
+    tableShortcut = new QShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q), this);
+    connect(tableShortcut, &QShortcut::activated, this, [=] () {
+        ui->tableView->setFocus();
+        ui->tableView->setCurrentIndex(ui->tableView->model()->index(0, 1));
+    });
 
 }
 

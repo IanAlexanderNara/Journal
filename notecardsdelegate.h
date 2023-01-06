@@ -2,6 +2,8 @@
 #define NOTECARDSDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include <QTimer>
+#include "notecardinputdialog.h"
 
 class NotecardsDelegate : public QStyledItemDelegate
 {

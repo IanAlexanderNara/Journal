@@ -17,6 +17,7 @@ QVariant NotecardsSqlModel::data(const QModelIndex &index, int role) const
     if(QSqlTableModel::data(this->index(row, 1)).toString().isEmpty()) emptyVal = true;
     if(QSqlTableModel::data(this->index(row, 2)).toString().isEmpty()) emptyVal = true;
     if(QSqlTableModel::data(this->index(row, 3)).toString().isEmpty()) emptyVal = true;
+    if(QSqlTableModel::data(this->index(row, 4)).toString().isEmpty()) emptyVal = true;
     if(role == Qt::BackgroundColorRole){
         if(emptyVal) return QColor(Qt::darkRed);
     } else if (role == Qt::TextColorRole){
