@@ -10,6 +10,10 @@
 #include "filterorrows.h"
 #include <QShortcut>
 #include <QFile>
+#include <QDate>
+#include <QSet>
+#include <QStringList>
+#include "dailynotecardsdialog.h"
 namespace Ui {
 class Notecards;
 }
@@ -31,7 +35,11 @@ private slots:
     void lineEditSearchTextChanged();
     void showContextMenuNotecards(const QPoint &pos);
 
+    void on_pushButton_clicked();
+
 private:
+    const int CARDS_PER_DAY = 3;
+    const int DELETE_CARDS_AFTER = 30;
     const QString DB_PATH = QCoreApplication::applicationDirPath() + "/databases/notecards.db";
     const QString CONNECTION_NAME = "NOTECARDS";
     const QString CONTEXT_MENU_CLEAR = "Clear Row Fields";
@@ -46,6 +54,8 @@ private:
     NotecardsSqlModel *model;
     FilterOrRows *filterModel;
     NotecardsDelegate *delegate;
+
+
 };
 
 #endif // NOTECARDS_H

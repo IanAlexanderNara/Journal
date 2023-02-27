@@ -35,6 +35,22 @@ Notecards::Notecards(QWidget *parent) :
     QString sqlString(QString("CREATE TABLE IF NOT EXISTS notecards ") +
                       QString("(number INTERGER PRIMARY KEY, author TEXT NOT NULL, title TEXT NOT NULL, themes TEXT NOT NULL, text TEXT);"));
     query.exec(sqlString);
+    sqlString = QString(QString("CREATE TABLE IF NOT EXISTS daily ") +
+                      QString("(number INTERGER PRIMARY KEY, date INTEGER NOT NULL);"));
+    query.exec(sqlString);
+
+    // clean daily records
+    int threshold = QDate::currentDate().toJulianDay() - DELETE_CARDS_AFTER;
+    QSqlQuery loadQuery(db);
+    loadQuery.prepare("SELECT * FROM daily WHERE date <= ?");
+    loadQuery.addBindValue(threshold);
+    loadQuery.exec();
+    QSqlQuery deleteQuery(db);
+    while(loadQuery.next()){
+        deleteQuery.prepare(QString("DELETE FROM daily WHERE number = ?"));
+        deleteQuery.addBindValue(loadQuery.value(0));
+        deleteQuery.exec();
+    }
 
     // Set up our table view model
     model = new NotecardsSqlModel(this, db);
@@ -151,5 +167,65 @@ void Notecards::showContextMenuNotecards(const QPoint &pos)
             while(model->canFetchMore()) model->fetchMore();
         }
     }
+}
+
+
+void Notecards::on_pushButton_clicked()
+{
+
+    QSet<int> currentIds = QSet<int>();
+    QList<int> daysIds = QList<int>();
+    QStringList daysCards = QStringList();
+    QStringList daysTitles = QStringList();
+    QStringList daysAuthors = QStringList();
+
+    // load the ids of the recent notecards
+    QSqlQuery query(db);
+    query.exec(QString("SELECT number,date FROM daily;"));
+
+    while (query.next()) {
+        int id = query.value(0).toInt();
+        int date = query.value(1).toInt();
+        if(date == QDate::currentDate().toJulianDay()){
+            daysIds.append(id);
+        }
+        currentIds.insert(id);
+    }
+
+    if(daysIds.empty()){
+        // query for new cards
+        query.exec(QString("SELECT * FROM notecards ORDER BY RANDOM();"));
+        // check if recent
+
+
+        while(daysCards.size() < CARDS_PER_DAY && query.next()){
+            int potentialCardId = query.value(0).toInt();
+            if(!currentIds.contains(potentialCardId)){
+                daysCards.append(query.value(4).toString());
+                daysAuthors.append(query.value(1).toString());
+                daysTitles.append(query.value(2).toString());
+                daysIds.append(potentialCardId);
+            }
+        }
+        for(int i =0; i < daysIds.size(); i++){
+            query.prepare("INSERT INTO daily (number, date) VALUES(:number, :date);");
+            query.bindValue(":number", daysIds.at(i));
+            query.bindValue(":date", QDate::currentDate().toJulianDay());
+            query.exec();
+        }
+    } else {
+        for(int i = 0; i < daysIds.size(); i++){
+            query.prepare("SELECT * FROM notecards WHERE number = ?");
+            query.addBindValue(daysIds.at(i));
+            query.exec();
+            query.next();
+            daysCards.append(query.value(4).toString());
+            daysAuthors.append(query.value(1).toString());
+            daysTitles.append(query.value(2).toString());
+        }
+    }
+
+    DailyNotecardsDialog *dailyNotecardsDialog= new DailyNotecardsDialog(this, daysIds, daysAuthors, daysTitles, daysCards);
+    dailyNotecardsDialog->exec();
 }
 

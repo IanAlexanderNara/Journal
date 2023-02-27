@@ -9,6 +9,7 @@ CONFIG += c++11 testcase no_testcase_installs
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dailynotecardsdialog.cpp \
     datepicker.cpp \
     filterorrows.cpp \
     journal.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
     settingsdialog.cpp
 
 HEADERS += \
+    dailynotecardsdialog.h \
     datepicker.h \
     filterorrows.h \
     journal.h \
@@ -44,6 +46,7 @@ HEADERS += \
     settingsdialog.h
 
 FORMS += \
+    dailynotecardsdialog.ui \
     datepicker.ui \
     journal.ui \
     mainwindow.ui \
