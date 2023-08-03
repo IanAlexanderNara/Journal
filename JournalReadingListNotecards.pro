@@ -55,7 +55,9 @@ FORMS += \
     readinglist.ui \
     settingsdialog.ui
 
-LIBS += -L/usr/lib -lssl -lcrypto
+
+LIBS += -LC:/Qt/Tools/OpenSSL/Win_x64/lib libcrypto.lib libssl.lib
+INCLUDEPATH += "C:/Qt/Tools/OpenSSL/Win_x64/include"
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -31,7 +31,7 @@ bool JournalEncrypter::prepareAndEncrypt(QString entryText, QString password, in
     }
 
     // get ciphertext
-    unsigned char ciphertext[ptba.size()+BLOCK_SIZE];
+    unsigned char* ciphertext = new unsigned char[ptba.size()+BLOCK_SIZE];
     int ctlen = encrypt((unsigned char *) plaintext, ptba.size(), key, iv, ciphertext, parent);
     if(ctlen == -1)
         return false;
@@ -93,7 +93,7 @@ QString JournalEncrypter::prepareAndDecrypt(QString password, int date, QSqlData
     }
 
     // Get plaintext
-    unsigned char plaintext[ctba.size()];
+    unsigned char* plaintext = new unsigned char[ctba.size()];
     int ptlen = decrypt((unsigned char *) ciphertext, ctba.size(), key, (unsigned char *) iv, plaintext, parent);
     if(ptlen == -1)
         return nullptr;
